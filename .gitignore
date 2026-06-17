@@ -1,0 +1,6 @@
+.devcontainer/
+.python-version
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
