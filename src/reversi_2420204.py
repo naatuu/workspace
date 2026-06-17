@@ -76,7 +76,12 @@ def board_scan(board, row0, col0, row_inc, col_inc, turn):  # 練習4
 
 
 def board_movable(board, row, col, turn):  # 練習5
-    pass
+    if board[row][col] != BOARD_EMPTY:
+        return False
+    for row_inc, col_inc in BOARD_DIRECTIONS:
+        if board_scan(board, row, col, row_inc, col_inc, turn) > 0:
+            return True
+    return False
 
 
 def board_movable_any(board, turn):  # 練習6

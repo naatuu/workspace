@@ -39,8 +39,11 @@ def test_board_scan():  # 練習4
     assert board_scan(board, 0, 0, 1, 1, BOARD_SENTE) == 0
 
 
-# def test_board_movable(board, row, col, turn):  # 練習5
-#    pass
+def test_board_movable():  # 練習5
+    board = initial_board()
+    assert board_movable(board, 2, 3, BOARD_SENTE)
+    assert not board_movable(board, 2, 3, BOARD_GOTE)
+    assert not board_movable(board, 3, 3, BOARD_SENTE)
 
 
 # def test_board_movable_any(board, turn):  # 練習6
