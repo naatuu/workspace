@@ -35,7 +35,11 @@ def initial_board():  # 練習1
 
 
 def change_turn():  # 練習2
-    return -turn
+    turn = BOARD_SENTE  # 先手から開始
+    if turn == BOARD_SENTE:
+        return BOARD_GOTE
+    elif turn == BOARD_GOTE:
+        return BOARD_SENTE
 
 
 def print_board(board):  # 練習3
