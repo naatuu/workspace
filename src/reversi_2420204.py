@@ -34,8 +34,7 @@ def initial_board():  # 練習1
     return board
 
 
-def change_turn():  # 練習2
-    turn = BOARD_SENTE  # 先手から開始
+def change_turn(turn):  # 練習2
     if turn == BOARD_SENTE:
         return BOARD_GOTE
     elif turn == BOARD_GOTE:
@@ -61,19 +60,7 @@ def print_current_turn(turn):
 
 
 def board_scan(board, row0, col0, row_inc, col_inc, turn):  # 練習4
-    row = row0 + row_inc
-    col = col0 + col_inc
-    count = 0
-    while 0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE:
-        if board[row][col] == -turn:
-            count += 1
-        elif board[row][col] == turn:
-            return count
-        else:
-            break
-        row += row_inc
-        col += col_inc
-    return 0
+    pass
 
 
 def board_movable(board, row, col, turn):  # 練習5
