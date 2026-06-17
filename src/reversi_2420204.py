@@ -93,7 +93,14 @@ def board_movable_any(board, turn):  # 練習6
 
 
 def board_move(board, row, col, turn):  # 練習7
-    pass
+    if not board_movable(board, row, col, turn):
+        return False
+    board[row][col] = turn
+    for row_inc, col_inc in BOARD_DIRECTIONS:
+        count = board_scan(board, row, col, row_inc, col_inc, turn)
+        for i in range(1, count + 1):
+            board[row + i * row_inc][col + i * col_inc] = turn
+    return True
 
 
 def board_number_check(board, turn):  # 練習8

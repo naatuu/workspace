@@ -52,8 +52,11 @@ def test_board_movable_any():  # 練習6
     assert board_movable_any(board, BOARD_GOTE)
 
 
-# def test_board_move(board, row, col, turn):  # 練習7
-#    pass
+def test_board_move():  # 練習7
+    board = initial_board()
+    board_move(board, 2, 3, BOARD_SENTE)
+    assert board[2][3] == BOARD_SENTE
+    assert board[3][3] == BOARD_SENTE
 
 
 # def test_board_number_check(board, turn):  # 練習8
