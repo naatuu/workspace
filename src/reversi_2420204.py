@@ -60,7 +60,19 @@ def print_current_turn(turn):
 
 
 def board_scan(board, row0, col0, row_inc, col_inc, turn):  # 練習4
-    pass
+    row = row0 + row_inc
+    col = col0 + col_inc
+    count = 0
+    while 0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE:
+        if board[row][col] == change_turn(turn):
+            count += 1
+        elif board[row][col] == turn:
+            return count
+        else:
+            break
+        row += row_inc
+        col += col_inc
+    return 0
 
 
 def board_movable(board, row, col, turn):  # 練習5

@@ -27,16 +27,16 @@ def test_initial_board():  # 練習1
     assert board[0][0] == BOARD_EMPTY
 
 
-# def test_change_turn():  # 練習2
-#    assert change_turn(BOARD_SENTE) == BOARD_GOTE
-#    assert change_turn(BOARD_GOTE) == BOARD_SENTE
+def test_change_turn():  # 練習2
+    assert change_turn(BOARD_SENTE) == BOARD_GOTE
+    assert change_turn(BOARD_GOTE) == BOARD_SENTE
 
 
-# def test_board_scan(board, row0, col0, row_inc, col_inc, turn):  # 練習4
-#   board = initial_board()
-#    assert test_board_scan(board, 2, 3, 1, 0, BOARD_SENTE) == 1
-#    assert test_board_scan(board, 2, 2, 1, 1, BOARD_SENTE) == 0
-#    assert test_board_scan(board, 0, 0, 1, 1, BOARD_SENTE) == 0
+def test_board_scan():  # 練習4
+    board = initial_board()
+    assert board_scan(board, 2, 3, 1, 0, BOARD_SENTE) == 1
+    assert board_scan(board, 2, 2, 1, 1, BOARD_SENTE) == 0
+    assert board_scan(board, 0, 0, 1, 1, BOARD_SENTE) == 0
 
 
 # def test_board_movable(board, row, col, turn):  # 練習5
