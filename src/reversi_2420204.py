@@ -85,7 +85,11 @@ def board_movable(board, row, col, turn):  # 練習5
 
 
 def board_movable_any(board, turn):  # 練習6
-    pass
+    for row in range(BOARD_SIZE):
+        for col in range(BOARD_SIZE):
+            if board_movable(board, row, col, turn):
+                return True
+    return False
 
 
 def board_move(board, row, col, turn):  # 練習7
