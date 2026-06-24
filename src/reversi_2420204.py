@@ -134,15 +134,22 @@ def board_eval(board):  # 練習9
 
 def board_state(board, turn):  # 練習10
     if board_movable_any(board, turn):
-        return None
+        return None  # ゲーム継続中
     elif board_movable_any(board, change_turn(turn)):
-        return str("pass")
+        return "pass"  # パス
     else:
-        return float(board_eval(board))
+        return float(board_eval(board))  # 終局
 
 
 def game_result(board, state):  # 練習11
-    pass
+    if state > 0:
+        result = "Game Won by Sente"
+    elif state < 0:
+        result = "Game Won by Gote"
+    else:
+        result = "Draw"
+
+    return f"{result}\nScore is {board_number_check(board, BOARD_SENTE)} - {board_number_check(board, BOARD_GOTE)}"
 
 
 def play_by_human(board, turn, count):  # 練習12
