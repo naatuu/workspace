@@ -113,7 +113,23 @@ def board_number_check(board, turn):  # 練習8
 
 
 def board_eval(board):  # 練習9
-    pass
+    count_sente = 0
+    count_gote = 0
+
+    for row in range(BOARD_SIZE):
+        for col in range(BOARD_SIZE):
+            if board[row][col] == BOARD_SENTE:
+                count_sente += 1
+            elif board[row][col] == BOARD_GOTE:
+                count_gote += 1
+
+    denominator = count_sente + count_gote
+
+    if denominator == 0:
+        return 0.0
+
+    numerator = count_sente - count_gote
+    return numerator / denominator
 
 
 def board_state(board, turn):  # 練習10
