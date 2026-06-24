@@ -178,7 +178,33 @@ def play_by_human(board, turn, count):  # 練習12＿人間が入力する
 
 
 def othello(sente_gote, yomi_depth=None):  # 練習13_オセロゲーム関数を定義
-    pass
+    board = initial_board()
+    turn = sente_gote[0]
+    count = 1
+
+    while True:
+        print_board(board)
+        print_current_turn(turn)
+        state = board_state(board, turn)
+
+        if state is None:
+            if turn == sente_gote[0]:
+                play_by_human(board, turn, count)
+            else:
+                # AIの処理
+                pass
+            count += 1
+
+        elif state == "pass":
+            print(f"{BOARD_SYMBOL[turn]} has no valid moves. Passing turn.")
+            turn = change_turn(turn)
+            continue
+
+        else:
+            print(game_result(board, state))
+            break
+
+        turn = change_turn(turn)
 
 
 print_board(initial_board())
