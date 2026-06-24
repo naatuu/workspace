@@ -25,7 +25,7 @@ BOARD_DIRECTIONS = [
 ]
 
 
-def initial_board():  # 練習1
+def initial_board():  # 練習1_初期盤面
     board = [[BOARD_EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
     board[3][3] = BOARD_GOTE
     board[4][4] = BOARD_GOTE
@@ -34,14 +34,14 @@ def initial_board():  # 練習1
     return board
 
 
-def change_turn(turn):  # 練習2
+def change_turn(turn):  # 練習2_手番交代
     if turn == BOARD_SENTE:
         return BOARD_GOTE
     elif turn == BOARD_GOTE:
         return BOARD_SENTE
 
 
-def print_board(board):  # 練習3
+def print_board(board):  # 練習3_盤面表示
     print("R/C 1 2 3 4 5 6 7 8")
     for row in range(BOARD_SIZE):
         print(f"  {row + 1}", end=" ")
@@ -50,7 +50,7 @@ def print_board(board):  # 練習3
         print()
 
 
-def print_current_turn(turn):
+def print_current_turn(turn):  # 練習3_現在の手番表示
     if turn == BOARD_SENTE:
         print("先手の番です。")
     elif turn == BOARD_GOTE:
@@ -59,7 +59,9 @@ def print_current_turn(turn):
         print("無効なターンです。")
 
 
-def board_scan(board, row0, col0, row_inc, col_inc, turn):  # 練習4
+def board_scan(
+    board, row0, col0, row_inc, col_inc, turn
+):  # 練習4_方向ごとの反転可能な石の数を数える
     row = row0 + row_inc
     col = col0 + col_inc
     count = 0
@@ -75,7 +77,7 @@ def board_scan(board, row0, col0, row_inc, col_inc, turn):  # 練習4
     return 0
 
 
-def board_movable(board, row, col, turn):  # 練習5
+def board_movable(board, row, col, turn):  # 練習5_指定位置に石を置けるか判定
     if board[row][col] != BOARD_EMPTY:
         return False
     for row_inc, col_inc in BOARD_DIRECTIONS:
@@ -84,7 +86,7 @@ def board_movable(board, row, col, turn):  # 練習5
     return False
 
 
-def board_movable_any(board, turn):  # 練習6
+def board_movable_any(board, turn):  # 練習6＿合法手があるか判定
     for row in range(BOARD_SIZE):
         for col in range(BOARD_SIZE):
             if board_movable(board, row, col, turn):
@@ -92,7 +94,7 @@ def board_movable_any(board, turn):  # 練習6
     return False
 
 
-def board_move(board, row, col, turn):  # 練習7
+def board_move(board, row, col, turn):  # 練習7_石を置き、反転させる
     if not board_movable(board, row, col, turn):
         return False
     board[row][col] = turn
@@ -103,7 +105,7 @@ def board_move(board, row, col, turn):  # 練習7
     return True
 
 
-def board_number_check(board, turn):  # 練習8
+def board_number_check(board, turn):  # 練習8_石の数を数える
     count = 0
     for row in range(BOARD_SIZE):
         for col in range(BOARD_SIZE):
@@ -112,7 +114,7 @@ def board_number_check(board, turn):  # 練習8
     return count
 
 
-def board_eval(board):  # 練習9
+def board_eval(board):  # 練習9_評価関数
     count_sente = 0
     count_gote = 0
 
@@ -132,7 +134,7 @@ def board_eval(board):  # 練習9
     return numerator / denominator
 
 
-def board_state(board, turn):  # 練習10
+def board_state(board, turn):  # 練習10_盤面状態
     if board_movable_any(board, turn):
         return None  # ゲーム継続中
     elif board_movable_any(board, change_turn(turn)):
@@ -141,7 +143,7 @@ def board_state(board, turn):  # 練習10
         return float(board_eval(board))  # 終局
 
 
-def game_result(board, state):  # 練習11
+def game_result(board, state):  # 練習11_ゲーム結果
     if state > 0:
         result = "Game Won by Sente"
     elif state < 0:
@@ -152,7 +154,7 @@ def game_result(board, state):  # 練習11
     return f"{result}\nScore is {board_number_check(board, BOARD_SENTE)} - {board_number_check(board, BOARD_GOTE)}"
 
 
-def play_by_human(board, turn, count):  # 練習12
+def play_by_human(board, turn, count):  # 練習12＿人間が入力する
     # 合法手がない場合は何も入力させずに戻る（呼び出し側でパス処理を行う）。
     if not board_movable_any(board, turn):
         return
@@ -175,7 +177,7 @@ def play_by_human(board, turn, count):  # 練習12
             return
 
 
-def othello(sente_gote, yomi_depth=None):  # 練習13
+def othello(sente_gote, yomi_depth=None):  # 練習13_オセロゲーム関数を定義
     pass
 
 
