@@ -133,7 +133,12 @@ def board_eval(board):  # 練習9
 
 
 def board_state(board, turn):  # 練習10
-    pass
+    if board_movable_any(board, turn):
+        return None
+    elif board_movable_any(board, change_turn(turn)):
+        return str("pass")
+    else:
+        return float(board_eval(board))
 
 
 def game_result(board, state):  # 練習11
