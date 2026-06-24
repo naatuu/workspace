@@ -104,7 +104,12 @@ def board_move(board, row, col, turn):  # 練習7
 
 
 def board_number_check(board, turn):  # 練習8
-    pass
+    count = 0
+    for row in range(BOARD_SIZE):
+        for col in range(BOARD_SIZE):
+            if board[row][col] == turn:
+                count += 1
+    return count
 
 
 def board_eval(board):  # 練習9

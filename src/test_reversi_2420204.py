@@ -59,8 +59,10 @@ def test_board_move():  # 練習7
     assert board[3][3] == BOARD_SENTE
 
 
-# def test_board_number_check(board, turn):  # 練習8
-#    pass
+def test_board_number_check():  # 練習8
+    board = initial_board()
+    assert board_number_check(board, BOARD_SENTE) == 2
+    assert board_number_check(board, BOARD_GOTE) == 2
 
 
 # def test_board_eval(board):  # 練習9
