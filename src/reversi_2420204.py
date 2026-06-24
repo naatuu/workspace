@@ -153,7 +153,26 @@ def game_result(board, state):  # 練習11
 
 
 def play_by_human(board, turn, count):  # 練習12
-    pass
+    # 合法手がない場合は何も入力させずに戻る（呼び出し側でパス処理を行う）。
+    if not board_movable_any(board, turn):
+        return
+    while True:
+        # 入力が2つの整数でない場合は再入力させる。
+        inp = input(f"({count}) Enter row and col for {BOARD_SYMBOL[turn]}: ")
+        parts = inp.strip().split()
+        if len(parts) != 2:
+            continue
+        try:
+            row = int(parts[0]) - 1
+            col = int(parts[1]) - 1
+        except ValueError:
+            continue
+        # 盤面外、または合法手でない場合は再入力させる。
+        if not (0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE):
+            continue
+        # 合法手であれば board_move() で盤面を更新して戻る。
+        if board_move(board, row, col, turn):
+            return
 
 
 def othello(sente_gote, yomi_depth=None):  # 練習13
