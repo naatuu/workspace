@@ -70,17 +70,26 @@ def test_board_eval():  # 練習9
     assert board_eval(board) == 0.0
 
 
-# def test_board_state(board, turn):  # 練習10
-#    pass
+def test_board_state():  # 練習10
+    board = initial_board()
+    assert board_state(board, BOARD_SENTE) is None
+    assert board_state(board, BOARD_GOTE) is None
 
 
-# def test_game_result(board, state):  # 練習11
-#    pass
+def test_game_result():  # 練習11
+    board = initial_board()
+    state = board_eval(board)
+    result = game_result(board, state)
+    assert "Score is" in result
 
 
-# def test_play_by_human(board, turn, count):  # 練習12
-#    pass
+def test_play_by_human():  # 練習12
+    board = initial_board()
+    turn = BOARD_SENTE
+    count = 0
+    play_by_human(board, turn, count)
 
 
-# def test_othello(sente_gote, yomi_depth=None):  # 練習13
-#    pass
+def test_othello():  # 練習13
+    sente_gote = (BOARD_SENTE, BOARD_GOTE)
+    othello(sente_gote)

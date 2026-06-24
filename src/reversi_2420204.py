@@ -179,7 +179,7 @@ def play_by_human(board, turn, count):  # 練習12＿人間が入力する
 
 def othello(sente_gote, yomi_depth=None):  # 練習13_オセロゲーム関数を定義
     board = initial_board()
-    turn = sente_gote[0]
+    turn = sente_gote[0]  # 先手番から開始
     count = 1
 
     while True:
