@@ -26,6 +26,8 @@ BOARD_DIRECTIONS = [
     (-1, 1),  # 右上
 ]
 
+NODE_CHECK_COUNT = 0
+
 
 def initial_board():  # 練習1_初期盤面
     board = [[BOARD_EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
@@ -247,6 +249,7 @@ def expand_node(parent, turn):  # 練習15_節点の展開
 def minimax(node, turn, count, depth):  # 練習16_ミニマックス法
 
     state = node_state(node, turn, count)
+    node_check()
 
     # state が float なら終局
     if isinstance(state, float):
@@ -303,6 +306,7 @@ def minimax_children(
 
 def alpha_beta(node, turn, count, depth, alpha, beta):  # 練習20_アルファベータ法
     state = node_state(node, turn, count)
+    node_check()
 
     # state が float なら終局
     if isinstance(state, float):
@@ -352,10 +356,26 @@ def alpha_beta_children(
     return result_node
 
 
-def play_by_machine(board, turn, count, depth):
+def play_by_machine(
+    board, turn, count, depth
+):  # 練習22_コンピュータの着手（アルファベータ法）
     node = Node(board, turn, 0, 0, 0.0)
     # best_node = minimax(node, turn, count, depth)
     best_node = alpha_beta(node, turn, count, depth, -math.inf, math.inf)
     row, col = best_node.row, best_node.col
     board_move(board, row, col, turn)
     print(f"({count}) My move is {row + 1} {col + 1}.")
+
+
+def node_check_begin():
+    global NODE_CHECK_COUNT
+    NODE_CHECK_COUNT = 0
+
+
+def node_check():
+    global NODE_CHECK_COUNT
+    NODE_CHECK_COUNT += 1
+
+
+def node_check_end():
+    print(f"{NODE_CHECK_COUNT} nodes checked.")
