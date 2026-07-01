@@ -208,3 +208,33 @@ def othello(sente_gote, yomi_depth=None):  # 練習13_オセロゲーム関数�
 
 
 # othello(None)  # ゲームを開始
+
+
+class Node:
+    def __init__(self, board, turn, row, col, value):
+        self.board = board  # 盤面の状態
+        self.turn = turn  # 現在の手番
+        self.row = row
+        self.col = col
+        self.value = value  # 評価
+
+
+def node_state(node, turn, count):  # 節点の状態
+    return board_state(node.board, turn)
+
+
+def eval_node(node, turn, count):  # 節点の評価
+    return board_eval(node.board)
+
+
+def expand_node(parent, turn):  # 練習15_節点の展開
+    children = []
+    moves = board_movable(parent.board, turn)
+    for row, col in moves:
+        new_board = [row[:] for row in parent.board]  # 盤面をコピー
+        board_move(new_board, row, col, turn)
+        child_node = Node(
+            new_board, change_turn(turn), row, col, eval_node(parent, turn, 0)
+        )
+        children.append(child_node)
+    return children

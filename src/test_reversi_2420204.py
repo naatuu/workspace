@@ -93,3 +93,10 @@ def test_game_result():  # 練習11
 def test_othello():  # 練習13
     sente_gote = (BOARD_SENTE, BOARD_GOTE)
     # othello(sente_gote)
+
+
+def expand_node(parent, turn):
+    root = Node(initial_board(), BOARD_SENTE, 0, 0, 0.0)
+    children = expand_node(root, BOARD_SENTE)
+    assert len(children) == 4
+    assert all(isinstance(child, Node) for child in children)
