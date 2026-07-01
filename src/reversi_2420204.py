@@ -359,12 +359,16 @@ def alpha_beta_children(
 def play_by_machine(
     board, turn, count, depth
 ):  # 練習22_コンピュータの着手（アルファベータ法）
+    node_check_begin()
+
     node = Node(board, turn, 0, 0, 0.0)
     # best_node = minimax(node, turn, count, depth)
     best_node = alpha_beta(node, turn, count, depth, -math.inf, math.inf)
     row, col = best_node.row, best_node.col
     board_move(board, row, col, turn)
     print(f"({count}) My move is {row + 1} {col + 1}.")
+
+    node_check_end()
 
 
 def node_check_begin():
