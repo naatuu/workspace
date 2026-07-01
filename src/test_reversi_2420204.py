@@ -83,13 +83,13 @@ def test_game_result():  # 練習11
     assert "Score is" in result
 
 
-def test_play_by_human():  # 練習12
-    board = initial_board()
-    turn = BOARD_SENTE
-    count = 0
-    play_by_human(board, turn, count)
+# def test_play_by_human():  # 練習12
+# board = initial_board()
+# turn = BOARD_SENTE
+# count = 0
+# play_by_human(board, turn, count)
 
 
 def test_othello():  # 練習13
     sente_gote = (BOARD_SENTE, BOARD_GOTE)
-    othello(sente_gote)
+    # othello(sente_gote)

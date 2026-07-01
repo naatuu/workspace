@@ -1,3 +1,45 @@
+commit c27e1ddb2375e462d92ba5cb33d5f1b0645cb31f
+Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
+Date:   Wed Jun 24 08:25:18 2026 +0000
+
+    g13
+
+commit 8c1f11d794bcf7e03e52a3398c99114a7c0b1a1c
+Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
+Date:   Wed Jun 24 07:59:06 2026 +0000
+
+    g13
+
+commit fcc3fec97615819e6dc3dded1f7ee746bdcb615f
+Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
+Date:   Wed Jun 24 06:51:16 2026 +0000
+
+    補助コメント
+
+commit 70f1d1c943530d07fc0aa33690110c996e75784f
+Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
+Date:   Wed Jun 24 06:36:12 2026 +0000
+
+    g12
+
+commit 446650c53e0a80229d642f84a1d11fc7afe0e078
+Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
+Date:   Wed Jun 24 06:11:21 2026 +0000
+
+    g11
+
+commit 7954cb76a54d21692a0fc60000468bdb00e6b14c
+Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
+Date:   Wed Jun 24 05:28:42 2026 +0000
+
+    g10
+
+commit 12e0322abbc1971653257e39920550bdbe4827a8
+Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
+Date:   Wed Jun 24 05:24:16 2026 +0000
+
+    g9
+
 commit 34ed2cfb243f652481e36066861a0e9f10a19e48
 Author: naatuu <j20204@e.hiroshima-cu.ac.jp>
 Date:   Wed Jun 24 05:15:23 2026 +0000
