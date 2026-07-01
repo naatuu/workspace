@@ -229,12 +229,58 @@ def eval_node(node, turn, count):  # 節点の評価
 
 def expand_node(parent, turn):  # 練習15_節点の展開
     children = []
-    moves = board_movable(parent.board, turn)
-    for row, col in moves:
-        new_board = [row[:] for row in parent.board]  # 盤面をコピー
-        board_move(new_board, row, col, turn)
-        child_node = Node(
-            new_board, change_turn(turn), row, col, eval_node(parent, turn, 0)
-        )
-        children.append(child_node)
+    for row in range(BOARD_SIZE):
+        for col in range(BOARD_SIZE):
+            if board_movable(parent.board, row, col, turn):  # 引数を正しく4つ渡す
+                new_board = [r[:] for r in parent.board]  # 盤面をコピー
+                board_move(new_board, row, col, turn)  # 石を置く
+
+                child_node = Node(new_board, turn, row, col, 0.0)
+                children.append(child_node)
+
     return children
+
+
+def minimax(node, turn, count, depth):  # 練習16_ミニマックス法
+
+    state = node_state(node, turn, count)
+
+    # state が float なら終局
+    if isinstance(state, float):
+        node.value = state
+        return node
+
+    # depth == 0 なら評価関数を呼び出す
+    if depth == 0:
+        node.value = eval_node(node, turn, count)
+        return node
+
+    # state == "pass" なら、手番を交代して同じ節点から探索を続ける
+    if state == "pass":
+        next_turn = change_turn(turn)
+        return minimax(node, next_turn, count + 1, depth)
+
+    #  それ以外なら、子節点を作って minimax_children() に渡す
+    else:
+        children = expand_node(node, turn)
+        return minimax_children(children, turn, count, depth)
+
+
+def minimax_children(
+    children, turn, count, depth
+):  # 練習17_探索子節点の中から最善手を選ぶ
+    new_turn = change_turn(turn)
+    new_depth = depth - 1
+    new_count = count + 1
+    val = None
+    result_node = None
+    for child in children:
+        v = minimax(child, new_turn, new_count, new_depth).value
+        if (
+            val is None
+            or (turn == BOARD_SENTE and v > val)
+            or (turn == BOARD_GOTE and v < val)
+        ):
+            val = v
+            result_node = Node(child.board, child.turn, child.row, child.col, v)
+    return result_node

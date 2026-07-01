@@ -15,6 +15,10 @@ from reversi_2420204 import (
     game_result,
     play_by_human,
     othello,
+    Node,
+    expand_node,
+    minimax,
+    minimax_children,
 )
 
 
@@ -95,8 +99,22 @@ def test_othello():  # 練習13
     # othello(sente_gote)
 
 
-def expand_node(parent, turn):
+def test_expand_node():  # 練習15
     root = Node(initial_board(), BOARD_SENTE, 0, 0, 0.0)
     children = expand_node(root, BOARD_SENTE)
     assert len(children) == 4
     assert all(isinstance(child, Node) for child in children)
+
+
+def test_minimax():
+    root = Node(initial_board(), BOARD_SENTE, 0, 0, 0.0)
+    best = minimax(root, BOARD_SENTE, 1, 2)
+    assert isinstance(best, Node)
+    assert board_movable(initial_board(), best.row, best.col, BOARD_SENTE)
+
+
+def test_minimax_children():  # 練習17
+    root = Node(initial_board(), BOARD_SENTE, 0, 0, 0.0)
+    best = minimax(root, BOARD_SENTE, 1, 2)
+    assert isinstance(best, Node)
+    assert board_movable(initial_board(), best.row, best.col, BOARD_SENTE)
