@@ -284,3 +284,16 @@ def minimax_children(
             val = v
             result_node = Node(child.board, child.turn, child.row, child.col, v)
     return result_node
+
+
+def play_by_machine(board, turn, count, depth):  # 練習18_コンピュータの着手
+    root = Node(board, turn, 0, 0, 0.0)
+    best_node = minimax(root, turn, count, depth)
+    row, col = best_node.row, best_node.col
+    board_move(board, row, col, turn)
+    print(f"({count}) My move is {row + 1} {col + 1}.")
+
+
+# othello(BOARD_GOTE, 3)  # 人間先手 vs コンピュータ後手
+# othello(BOARD_SENTE, 3)  # コンピュータ先手 vs 人間後手
+# othello(BOARD_EMPTY, 2)  # コンピュータ vs コンピュータ
