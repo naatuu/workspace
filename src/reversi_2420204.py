@@ -177,7 +177,7 @@ def play_by_human(board, turn, count):  # 練習12＿人間が入力する
             return
 
 
-def othello(sente_gote, yomi_depth=None):  # 練習13_オセロゲーム関数を定義
+def othello(sente_gote, yomi_depth):  # 練習13_オセロゲーム関数を定義
     board = initial_board()
     turn = BOARD_SENTE  # 先手番から開始
     count = 1
@@ -192,7 +192,8 @@ def othello(sente_gote, yomi_depth=None):  # 練習13_オセロゲーム関数�
                 play_by_human(board, turn, count)
             else:
                 # AIの処理
-                pass
+                play_by_machine(board, turn, count, yomi_depth)
+
             count += 1
 
         elif state == "pass":
@@ -294,6 +295,6 @@ def play_by_machine(board, turn, count, depth):  # 練習18_コンピュータ�
     print(f"({count}) My move is {row + 1} {col + 1}.")
 
 
-# othello(BOARD_GOTE, 3)  # 人間先手 vs コンピュータ後手
-# othello(BOARD_SENTE, 3)  # コンピュータ先手 vs 人間後手
-# othello(BOARD_EMPTY, 2)  # コンピュータ vs コンピュータ
+# othello([BOARD_GOTE], 3)  # 人間先手 vs コンピュータ後手
+# othello([BOARD_SENTE], 3)  # コンピュータ先手 vs 人間後手
+# othello([BOARD_EMPTY], 2)  # コンピュータ vs コンピュータ
