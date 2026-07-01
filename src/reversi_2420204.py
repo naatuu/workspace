@@ -188,7 +188,7 @@ def othello(sente_gote, yomi_depth):  # 練習13_オセロゲーム関数を定�
         state = board_state(board, turn)
 
         if state is None:
-            if sente_gote is None or turn in sente_gote:
+            if sente_gote is None or turn not in sente_gote:
                 play_by_human(board, turn, count)
             else:
                 # AIの処理
@@ -296,5 +296,5 @@ def play_by_machine(board, turn, count, depth):  # 練習18_コンピュータ�
 
 
 # othello([BOARD_GOTE], 3)  # 人間先手 vs コンピュータ後手
-# othello([BOARD_SENTE], 3)  # コンピュータ先手 vs 人間後手
+othello([BOARD_SENTE], 3)  # コンピュータ先手 vs 人間後手
 # othello([BOARD_EMPTY], 2)  # コンピュータ vs コンピュータ
