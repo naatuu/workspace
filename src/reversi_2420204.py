@@ -1,3 +1,5 @@
+import math
+
 BOARD_SIZE = 8  # 盤上のサイズ
 BOARD_SENTE = 1  # 先手
 BOARD_GOTE = -1  # 後手
@@ -286,8 +288,7 @@ def minimax_children(
             result_node = Node(child.board, child.turn, child.row, child.col, v)
     return result_node
 
-
-def play_by_machine(board, turn, count, depth):  # 練習18_コンピュータの着手
+    # def play_by_machine(board, turn, count, depth):  # 練習18_コンピュータの着手
     root = Node(board, turn, 0, 0, 0.0)
     best_node = minimax(root, turn, count, depth)
     row, col = best_node.row, best_node.col
@@ -349,3 +350,12 @@ def alpha_beta_children(
         if alpha >= beta:
             break
     return result_node
+
+
+def play_by_machine(board, turn, count, depth):
+    node = Node(board, turn, 0, 0, 0.0)
+    # best_node = minimax(node, turn, count, depth)
+    best_node = alpha_beta(node, turn, count, depth, -math.inf, math.inf)
+    row, col = best_node.row, best_node.col
+    board_move(board, row, col, turn)
+    print(f"({count}) My move is {row + 1} {col + 1}.")
