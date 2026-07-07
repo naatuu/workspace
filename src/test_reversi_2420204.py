@@ -3,6 +3,7 @@ from reversi_2420204 import (
     BOARD_GOTE,
     BOARD_EMPTY,
     BOARD_SIZE,
+    BOARD_POINT,
     initial_board,
     change_turn,
     board_movable,
@@ -19,6 +20,10 @@ from reversi_2420204 import (
     expand_node,
     minimax,
     minimax_children,
+    eval_node,
+    board_eval2,
+    board_eval3,
+    kakutei_scan,
 )
 
 
@@ -120,9 +125,20 @@ def test_minimax_children():  # 練習17
     assert board_movable(initial_board(), best.row, best.col, BOARD_SENTE)
 
 
-def board_eval2(board, omomi):  # 練習26
+def test_board_eval2():  # 練習26
     board = initial_board()
     v = board_eval2(board, 3)
     assert isinstance(v, float)
     # 初期盤面では先手後手の位置点は対称なので 0.0 になるはず
     assert v == 0.0
+
+
+def test_kakutei_scan():  # 練習28
+    board = initial_board()
+    # 初期盤面では角は空なので、(0, 0) からの確定石は 0
+    assert kakutei_scan(board, 0, 0, 1, 0, BOARD_SENTE) == 0
+
+    # (3, 4) は先手の石。そこから上方向 (-1, 0) には先手1個
+    assert kakutei_scan(board, 3, 4, -1, 0, BOARD_SENTE) == 0  # 上に空
+    # 自分自身を含めて数えるので、先手1個分の +1
+    # ※ 細かい仕様（自身を含めるかどうか）は実装と合わせて確認すること
