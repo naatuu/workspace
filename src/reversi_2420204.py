@@ -479,8 +479,19 @@ def board_eval5(board, turn, omomi):  # 練習30：X打ちを減点する
         count += turn * -1
     return count * omomi
 
+    # def eval_node(node, turn, count):  # 練習31：eval_node() を改良する
+    board = node.board
+    if count < 25:
+        return board_eval2(board, 3) + board_eval(board)  # 序盤
+    elif count < 40:
+        return board_eval2(board, 3) + board_eval(board)  # 中盤
+    elif count < 60:
+        return board_eval2(board, 3) + board_eval(board)  # 終盤前
+    else:
+        return board_eval(board)  # 終盤
 
-def eval_node(node, turn, count):  # 練習31：eval_node() を改良する
+
+def eval_node(node, turn, count):  # 練習31：eval_node() 完成版
     board = node.board
     if count < 25:  # 序盤
         return (
@@ -503,3 +514,6 @@ def eval_node(node, turn, count):  # 練習31：eval_node() を改良する
         )
     else:  # 終盤
         return board_eval(board)
+
+
+othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
