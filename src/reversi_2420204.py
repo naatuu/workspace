@@ -29,6 +29,17 @@ BOARD_DIRECTIONS = [
 
 NODE_CHECK_COUNT = 0
 
+BOARD_POINT = [
+    [30, -12, 0.1, -0.9, -0.9, 0.1, -12, 30],
+    [-12, -15, -3, -3, -3, -3, -15, -12],
+    [0.1, -3, 0, -1, -1, 0, -3, 0.1],
+    [-0.9, -3, -1, -1, -1, -1, -3, -0.9],
+    [-0.9, -3, -1, -1, -1, -1, -3, -0.9],
+    [0.1, -3, 0, -1, -1, 0, -3, 0.1],
+    [-12, -15, -3, -3, -3, -3, -15, -12],
+    [30, -12, 0.1, -0.9, -0.9, 0.1, -12, 30],
+]
+
 
 def initial_board():  # 練習1_初期盤面
     board = [[BOARD_EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
@@ -397,3 +408,25 @@ def node_check_end():
 # othello([BOARD_SENTE], 3)  # コンピュータ先手 vs 人間後手
 # othello([BOARD_EMPTY], 2)  # コンピュータ vs コンピュータ
 # othello([None], 2)  # 人間vs人園
+
+
+def eval_node(node, turn, count):
+    board = node.board
+    if count < 25:
+        ...  # 序盤
+    elif count < 40:
+        ...  # 中盤
+    elif count < 60:
+        ...  # 終盤前
+    else:
+        return board_eval(board)  # 終盤
+
+
+def board_eval2(board, omomi):  # 練習26_位置点による評価を実装する
+    count = 0.0
+
+    for row in range(BOARD_SIZE):
+        for col in range(BOARD_SIZE):
+            count += board[row][col] * BOARD_POINT[row][col]
+
+    return count * omomi

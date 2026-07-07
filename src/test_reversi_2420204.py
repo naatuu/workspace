@@ -118,3 +118,11 @@ def test_minimax_children():  # 練習17
     best = minimax(root, BOARD_SENTE, 1, 2)
     assert isinstance(best, Node)
     assert board_movable(initial_board(), best.row, best.col, BOARD_SENTE)
+
+
+def board_eval2(board, omomi):  # 練習26
+    board = initial_board()
+    v = board_eval2(board, 3)
+    assert isinstance(v, float)
+    # 初期盤面では先手後手の位置点は対称なので 0.0 になるはず
+    assert v == 0.0
