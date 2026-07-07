@@ -393,6 +393,7 @@ def node_check_end():
     print(f"{NODE_CHECK_COUNT} nodes checked.")
 
 
-othello([BOARD_GOTE], 4)  # 人間先手 vs コンピュータ後手
+# othello([BOARD_GOTE], 4)  # 人間先手 vs コンピュータ後手
 # othello([BOARD_SENTE], 3)  # コンピュータ先手 vs 人間後手
 # othello([BOARD_EMPTY], 2)  # コンピュータ vs コンピュータ
+# othello([None], 2)  # 人間vs人園
