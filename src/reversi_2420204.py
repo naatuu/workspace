@@ -244,8 +244,8 @@ def node_state(node, turn, count):  # 節点の状態
     return board_state(node.board, turn)
 
 
-def eval_node(node, turn, count):  # 節点の評価
-    return board_eval(node.board)
+# def eval_node(node, turn, count):  # 節点の評価
+#    return board_eval(node.board)
 
 
 def expand_node(parent, turn):  # 練習15_節点の展開
@@ -410,18 +410,6 @@ def node_check_end():
 # othello([None], 2)  # 人間vs人園
 
 
-def eval_node(node, turn, count):
-    board = node.board
-    if count < 25:
-        ...  # 序盤
-    elif count < 40:
-        ...  # 中盤
-    elif count < 60:
-        ...  # 終盤前
-    else:
-        return board_eval(board)  # 終盤
-
-
 def board_eval2(board, omomi):  # 練習26_位置点による評価を実装する
     count = 0.0
 
@@ -456,3 +444,62 @@ def kakutei_scan(
         elif turn == BOARD_GOTE and length < 0:
             return length + 1  # 後手の確定石数を返す
     return length
+
+
+def board_eval4(board, omomi):  # 練習29：角からの確定石を評価する
+    count = 0.0
+    if board[0][0] != BOARD_EMPTY:
+        turn = board[0][0]
+        count += kakutei_scan(board, 0, 0, 1, 0, turn)  # 下方向
+        count += kakutei_scan(board, 0, 0, 0, 1, turn)  # 右方向
+    if board[7][7] != BOARD_EMPTY:
+        turn = board[7][7]
+        count += kakutei_scan(board, 7, 7, -1, 0, turn)  # 上方向
+        count += kakutei_scan(board, 7, 7, 0, -1, turn)  # 左方向
+    if board[0][7] != BOARD_EMPTY:
+        turn = board[0][7]
+        count += kakutei_scan(board, 0, 7, 1, 0, turn)  # 下方向
+        count += kakutei_scan(board, 0, 7, 0, -1, turn)  # 左方向
+    if board[7][0] != BOARD_EMPTY:
+        turn = board[7][0]
+        count += kakutei_scan(board, 7, 0, -1, 0, turn)  # 上方向
+        count += kakutei_scan(board, 7, 0, 0, 1, turn)  # 右方向
+    return count * omomi
+
+
+def board_eval5(board, turn, omomi):  # 練習30：X打ちを減点する
+    count = 0.0
+    if board[1][1] == turn and board[0][0] == BOARD_EMPTY:
+        count += turn * -1
+    if board[1][6] == turn and board[0][7] == BOARD_EMPTY:
+        count += turn * -1
+    if board[6][1] == turn and board[7][0] == BOARD_EMPTY:
+        count += turn * -1
+    if board[6][6] == turn and board[7][7] == BOARD_EMPTY:
+        count += turn * -1
+    return count * omomi
+
+
+def eval_node(node, turn, count):  # 練習31：eval_node() を改良する
+    board = node.board
+    if count < 25:  # 序盤
+        return (
+            board_eval2(board, 3)
+            + board_eval3(board, turn, 20)
+            + board_eval4(board, 100)
+            + board_eval5(board, turn, 500)
+        )
+    elif count < 40:  # 中盤
+        return (
+            board_eval2(board, 3)
+            + board_eval3(board, turn, 40)
+            + board_eval4(board, 100)
+        )
+    elif count < 60:  # 終盤前
+        return (
+            board_eval2(board, 3)
+            + board_eval3(board, turn, 20)
+            + board_eval4(board, 100)
+        )
+    else:  # 終盤
+        return board_eval(board)
