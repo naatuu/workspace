@@ -618,4 +618,30 @@ def fitness(weights, baseline, n_games, depth):
     return wins
 
 
+def hill_climbing(
+    initial_weights, max_iter, sigma, baseline, n_games, depth
+):  # 練習34：山登り法を実装する
+    current = list(initial_weights)
+    current_fitness = fitness(current, baseline, n_games, depth)
+    history = [(0, current[:], current_fitness)]
+
+    for t in range(1, max_iter + 1):
+        neighbor = [w + random.gauss(0, sigma) for w in current]
+        neighbor = [max(0.0, w) for w in neighbor]  # 重みは非負に制限
+        neighbor_fitness = fitness(neighbor, baseline, n_games, depth)
+        if neighbor_fitness > current_fitness:
+            current = neighbor
+            current_fitness = neighbor_fitness
+        history.append((t, current[:], current_fitness))
+
+    return current, history
+
+
+# まず w4 (確定石) だけを動かす
+def fitness_w4(w4, baseline, n_games, depth):  # 練習35：1 次元から動作確認
+    weights = list(baseline)
+    weights[2] = w4  # baseline の他の重みは固定、w4 だけ可変
+    return fitness(weights, baseline, n_games, depth)
+
+
 othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
