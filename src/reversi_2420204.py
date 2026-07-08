@@ -668,4 +668,11 @@ def simulated_annealing(
     return best, history
 
 
+def tournament_select(population, fitnesses, k=3):  # 練習39：トーナメント選択
+    """k 個をランダムに選び、その中で最良の個体を返す"""
+    candidates = random.sample(range(len(population)), k)
+    best = max(candidates, key=lambda i: fitnesses[i])
+    return population[best]
+
+
 othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
