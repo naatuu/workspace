@@ -664,6 +664,36 @@ plt.xlabel("w4 (Stable Disks Weight)")
 plt.ylabel("Fitness (Wins out of 20)")
 plt.grid(True)
 plt.show()
+plt.savefig("w4_練習35.png")
+
+
+print("\n--- 練習36: 4次元山登り法を開始 ---")
+
+# 初期重みと、山登り法の実行
+initial_w = [3.0, 20.0, 100.0, 500.0]
+best_w, history = hill_climbing(
+    initial_weights=initial_w,
+    max_iter=30,  # 反復回数（実験のため少なめに設定、本来は100以上推奨）
+    sigma=10.0,  # ステップサイズ（ノイズの大きさ）
+    baseline=initial_w,
+    n_games=8,  # 1世代あたりの対戦数
+    depth=2,
+)
+
+print(f"\n探索完了 最良の重み: {best_w}")
+
+# 適合度の推移をプロット
+iterations = [item[0] for item in history]
+fitness_history = [item[2] for item in history]
+
+plt.figure(figsize=(6, 4))
+plt.plot(iterations, fitness_history, marker="s", color="r")
+plt.title("Practice 36: Hill Climbing Progress")
+plt.xlabel("Iteration (t)")
+plt.ylabel("Current Weights Fitness")
+plt.grid(True)
+plt.show()
+plt.savefig("w4_練習36.png")
 
 
 def simulated_annealing(
