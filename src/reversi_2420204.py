@@ -645,55 +645,54 @@ def fitness_w4(w4, baseline, n_games, depth):  # 練習35：1 次元から動作
     return fitness(weights, baseline, n_games, depth)
 
 
-baseline_weights = [3.0, 20.0, 100.0, 500.0]  # 元のコードに登場する初期基準
-w4_values = [0, 50, 100, 200, 500, 1000]
-fitness_scores = []
+# baseline_weights = [3.0, 20.0, 100.0, 500.0]  # 元のコードに登場する初期基準
+# w4_values = [0, 50, 100, 200, 500, 1000]
+# fitness_scores = []
 
-print("--- 練習35: w4の1次元動作確認 ---")
-for w4 in w4_values:
-    # 20試合対戦（先手10回・後手10回）させて勝数をカウント
-    score = fitness_w4(w4, baseline=baseline_weights, n_games=20, depth=2)
-    fitness_scores.append(score)
-    print(f"w4 = {w4:4d} | 適合度 (勝数): {score}/20")
+# print("--- 練習35: w4の1次元動作確認 ---")
+# for w4 in w4_values:
+# 20試合対戦（先手10回・後手10回）させて勝数をカウント
+# score = fitness_w4(w4, baseline=baseline_weights, n_games=20, depth=2)
+# fitness_scores.append(score)
+# print(f"w4 = {w4:4d} | 適合度 (勝数): {score}/20")
 
 # グラフのプロット
-plt.figure(figsize=(6, 4))
-plt.plot(w4_values, fitness_scores, marker="o", color="b", linestyle="-")
-plt.title("Practice 35: Fitness vs w4 Value")
-plt.xlabel("w4 (Stable Disks Weight)")
-plt.ylabel("Fitness (Wins out of 20)")
-plt.grid(True)
-plt.show()
-plt.savefig("w4_練習35.png")
+# plt.figure(figsize=(6, 4))
+# plt.plot(w4_values, fitness_scores, marker="o", color="b", linestyle="-")
+# plt.title("Practice 35: Fitness vs w4 Value")
+# plt.xlabel("w4 (Stable Disks Weight)")
+# plt.ylabel("Fitness (Wins out of 20)")
+# plt.grid(True)
+# plt.savefig("w4_練習35.png")
+# plt.show()
 
-
-print("\n--- 練習36: 4次元山登り法を開始 ---")
+# print("\n--- 練習36: 4次元山登り法を開始 ---")
 
 # 初期重みと、山登り法の実行
-initial_w = [3.0, 20.0, 100.0, 500.0]
-best_w, history = hill_climbing(
-    initial_weights=initial_w,
-    max_iter=30,  # 反復回数（実験のため少なめに設定、本来は100以上推奨）
-    sigma=10.0,  # ステップサイズ（ノイズの大きさ）
-    baseline=initial_w,
-    n_games=8,  # 1世代あたりの対戦数
-    depth=2,
-)
+# initial_w = [3.0, 20.0, 100.0, 500.0]
+# best_w, history = hill_climbing(
+# initial_weights=initial_w,
+# max_iter=30,  # 反復回数（実験のため少なめに設定、本来は100以上推奨）
+# sigma=10.0,  # ステップサイズ（ノイズの大きさ）
+# baseline=initial_w,
+# n_games=8,  # 1世代あたりの対戦数
+# depth=2,
+# )
 
-print(f"\n探索完了 最良の重み: {best_w}")
+# print(f"\n探索完了 最良の重み: {best_w}")
 
 # 適合度の推移をプロット
-iterations = [item[0] for item in history]
-fitness_history = [item[2] for item in history]
+# iterations = [item[0] for item in history]
+# fitness_history = [item[2] for item in history]
 
-plt.figure(figsize=(6, 4))
-plt.plot(iterations, fitness_history, marker="s", color="r")
-plt.title("Practice 36: Hill Climbing Progress")
-plt.xlabel("Iteration (t)")
-plt.ylabel("Current Weights Fitness")
-plt.grid(True)
-plt.show()
-plt.savefig("w4_練習36.png")
+# plt.figure(figsize=(6, 4))
+# plt.plot(iterations, fitness_history, marker="s", color="r")
+# plt.title("Practice 36: Hill Climbing Progress")
+# plt.xlabel("Iteration (t)")
+# plt.ylabel("Current Weights Fitness")
+# plt.grid(True)
+# plt.savefig("w4_練習36.png")
+# # plt.show()
 
 
 def simulated_annealing(
@@ -718,6 +717,86 @@ def simulated_annealing(
         history.append((t, current[:], current_fitness))
 
     return best, history
+
+
+# 実験の共通設定
+initial_w = [3.0, 20.0, 100.0, 500.0]
+max_iter = 40
+sigma = 15.0
+n_games = 10
+depth = 2
+
+# パターン1: 標準的な設定
+print("\n--- [1] 標準設定での実験 ---")
+best_std, hist_std = simulated_annealing(
+    initial_w,
+    max_iter,
+    sigma,
+    T0=10.0,
+    T_end=0.1,
+    baseline=initial_w,
+    n_games=n_games,
+    depth=depth,
+)
+
+# パターン2: T0が大きすぎる
+print("\n--- [2] T0が大きすぎる実験 (ランダムウォーク) ---")
+best_high, hist_high = simulated_annealing(
+    initial_w,
+    max_iter,
+    sigma,
+    T0=1000.0,
+    T_end=100.0,
+    baseline=initial_w,
+    n_games=n_games,
+    depth=depth,
+)
+
+# パターン3: T0が小さすぎる
+print("\n--- [3] T0が小さすぎる実験 (山登り法化) ---")
+best_low, hist_low = simulated_annealing(
+    initial_w,
+    max_iter,
+    sigma,
+    T0=0.001,
+    T_end=0.0001,
+    baseline=initial_w,
+    n_games=n_games,
+    depth=depth,
+)
+
+# --- グラフの描画 ---
+plt.figure(figsize=(10, 6))
+
+plt.plot(
+    [h[0] for h in hist_std],
+    [h[2] for h in hist_std],
+    label="Standard (T0=10.0, Tend=0.1)",
+    color="green",
+    linewidth=2,
+)
+plt.plot(
+    [h[0] for h in hist_high],
+    [h[2] for h in hist_high],
+    label="Too High T0 (1000.0) -> Random Walk",
+    color="red",
+    linestyle="--",
+)
+plt.plot(
+    [h[0] for h in hist_low],
+    [h[2] for h in hist_low],
+    label="Too Low T0 (0.001) -> Hill Climbing",
+    color="blue",
+    linestyle=":",
+)
+
+plt.title("Practice 38: Effect of Temperature Schedules")
+plt.xlabel("Iteration (t)")
+plt.ylabel("Current Fitness (Wins)")
+plt.grid(True)
+plt.legend()
+plt.savefig("温度スケジュールの影響_練習38.png", dpi=300, bbox_inches="tight")
+plt.show()
 
 
 def tournament_select(population, fitnesses, k=3):  # 練習39：トーナメント選択
