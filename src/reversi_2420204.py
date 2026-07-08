@@ -1,4 +1,5 @@
 import math
+import random
 import time
 
 BOARD_SIZE = 8  # 盤上のサイズ
@@ -480,7 +481,7 @@ def board_eval5(board, turn, omomi):  # 練習30：X打ちを減点する
     return count * omomi
 
     # def eval_node(node, turn, count):  # 練習31：eval_node() を改良する
-    board = node.board
+    # board = node.board
     if count < 25:
         return board_eval2(board, 3) + board_eval(board)  # 序盤
     elif count < 40:
@@ -490,8 +491,7 @@ def board_eval5(board, turn, omomi):  # 練習30：X打ちを減点する
     else:
         return board_eval(board)  # 終盤
 
-
-def eval_node(node, turn, count):  # 練習31：eval_node() 完成版
+    # def eval_node(node, turn, count):  # 練習31：eval_node() 完成版
     board = node.board
     if count < 25:  # 序盤
         return (
@@ -514,6 +514,108 @@ def eval_node(node, turn, count):  # 練習31：eval_node() 完成版
         )
     else:  # 終盤
         return board_eval(board)
+
+
+def make_eval_node(weights):
+    """重みベクトルから eval_node 関数を作成して返す。"""
+    w2, w3, w4, w5 = weights
+
+    def eval_node(node, turn, count):
+        board = node.board
+        if count < 25:
+            return (
+                board_eval2(board, w2)
+                + board_eval3(board, turn, w3)
+                + board_eval4(board, w4)
+                + board_eval5(board, turn, w5)
+            )
+        elif count < 40:
+            return (
+                board_eval2(board, w2)
+                + board_eval3(board, turn, w3 * 2)
+                + board_eval4(board, w4)
+            )
+        elif count < 60:
+            return (
+                board_eval2(board, w2)
+                + board_eval3(board, turn, w3)
+                + board_eval4(board, w4)
+            )
+        else:
+            return board_eval(board)
+
+    return eval_node
+
+
+# モジュール全体で使う「現在の評価関数」を保持する
+_current_eval_node = None
+
+
+def set_eval_node(fn):
+    global _current_eval_node
+    _current_eval_node = fn
+
+
+def eval_node(node, turn, count):
+    return _current_eval_node(node, turn, count)
+
+
+def legal_moves(board, turn):
+    return [
+        (r, c)
+        for r in range(BOARD_SIZE)
+        for c in range(BOARD_SIZE)
+        if board_movable(board, r, c, turn)
+    ]
+
+
+# 練習33：適合度関数を実装する
+def play_one_game(eval_sente, eval_gote, depth, opening_random=4, rng=None):
+    """eval_sente を先手、eval_gote を後手として 1 局対戦し勝者を返す。"""
+    rng = rng or random
+    board = initial_board()
+    turn = BOARD_SENTE
+    count = 1
+    move_number = 0
+    while True:
+        state = board_state(board, turn)
+        if isinstance(state, float):
+            break
+        if state == "pass":
+            turn = change_turn(turn)
+            count += 1
+            continue
+        if move_number < opening_random:
+            row, col = rng.choice(legal_moves(board, turn))
+        else:
+            set_eval_node(eval_sente if turn == BOARD_SENTE else eval_gote)
+            node = Node(board, turn, 0, 0, 0.0)
+            best = alpha_beta(node, turn, count, depth, -math.inf, math.inf)
+            row, col = best.row, best.col
+        board_move(board, row, col, turn)
+        turn = change_turn(turn)
+        count += 1
+        move_number += 1
+    sente = board_number_check(board, BOARD_SENTE)
+    gote = board_number_check(board, BOARD_GOTE)
+    return BOARD_SENTE if sente > gote else BOARD_GOTE if gote > sente else 0
+
+
+def fitness(weights, baseline, n_games, depth):
+    eval_w = make_eval_node(weights)
+    eval_b = make_eval_node(baseline)
+    wins = 0
+    # 公平のため、先手・後手を交代しながら半分ずつ対戦する
+    for i in range(n_games):
+        if i % 2 == 0:
+            winner = play_one_game(eval_w, eval_b, depth)
+            if winner == BOARD_SENTE:
+                wins += 1
+        else:
+            winner = play_one_game(eval_b, eval_w, depth)
+            if winner == BOARD_GOTE:
+                wins += 1
+    return wins
 
 
 othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
