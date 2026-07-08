@@ -644,4 +644,28 @@ def fitness_w4(w4, baseline, n_games, depth):  # 練習35：1 次元から動作
     return fitness(weights, baseline, n_games, depth)
 
 
+def simulated_annealing(
+    initial_weights, max_iter, sigma, T0, T_end, baseline, n_games, depth
+):  # 練習37：焼きなまし法を実装する
+    current = list(initial_weights)
+    current_fitness = fitness(current, baseline, n_games, depth)
+    best, best_fitness = current[:], current_fitness
+    history = [(0, current[:], current_fitness)]
+
+    for t in range(1, max_iter + 1):
+        T = T0 * (T_end / T0) ** (t / max_iter)  # 指数冷却
+        neighbor = [max(0.0, w + random.gauss(0, sigma)) for w in current]
+        nf = fitness(neighbor, baseline, n_games, depth)
+        if nf > current_fitness:
+            current, current_fitness = neighbor, nf
+        else:
+            if random.random() < math.exp((nf - current_fitness) / max(T, 1e-9)):
+                current, current_fitness = neighbor, nf
+        if current_fitness > best_fitness:
+            best, best_fitness = current[:], current_fitness
+        history.append((t, current[:], current_fitness))
+
+    return best, history
+
+
 othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
