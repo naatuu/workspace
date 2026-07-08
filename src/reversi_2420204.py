@@ -1,6 +1,7 @@
 import math
 import random
 import time
+import matplotlib.pyplot as plt
 
 BOARD_SIZE = 8  # 盤上のサイズ
 BOARD_SENTE = 1  # 先手
@@ -309,11 +310,11 @@ def minimax_children(
     return result_node
 
     # def play_by_machine(board, turn, count, depth):  # 練習18_コンピュータの着手
-    root = Node(board, turn, 0, 0, 0.0)
-    best_node = minimax(root, turn, count, depth)
-    row, col = best_node.row, best_node.col
-    board_move(board, row, col, turn)
-    print(f"({count}) My move is {row + 1} {col + 1}.")
+    # root = Node(board, turn, 0, 0, 0.0)
+    # best_node = minimax(root, turn, count, depth)
+    # row, col = best_node.row, best_node.col
+    # board_move(board, row, col, turn)
+    # print(f"({count}) My move is {row + 1} {col + 1}.")
 
 
 # othello([BOARD_GOTE], 3)  # 人間先手 vs コンピュータ後手
@@ -492,7 +493,7 @@ def board_eval5(board, turn, omomi):  # 練習30：X打ちを減点する
         return board_eval(board)  # 終盤
 
     # def eval_node(node, turn, count):  # 練習31：eval_node() 完成版
-    board = node.board
+    # board = node.board
     if count < 25:  # 序盤
         return (
             board_eval2(board, 3)
@@ -644,6 +645,27 @@ def fitness_w4(w4, baseline, n_games, depth):  # 練習35：1 次元から動作
     return fitness(weights, baseline, n_games, depth)
 
 
+baseline_weights = [3.0, 20.0, 100.0, 500.0]  # 元のコードに登場する初期基準
+w4_values = [0, 50, 100, 200, 500, 1000]
+fitness_scores = []
+
+print("--- 練習35: w4の1次元動作確認 ---")
+for w4 in w4_values:
+    # 20試合対戦（先手10回・後手10回）させて勝数をカウント
+    score = fitness_w4(w4, baseline=baseline_weights, n_games=20, depth=2)
+    fitness_scores.append(score)
+    print(f"w4 = {w4:4d} | 適合度 (勝数): {score}/20")
+
+# グラフのプロット
+plt.figure(figsize=(6, 4))
+plt.plot(w4_values, fitness_scores, marker="o", color="b", linestyle="-")
+plt.title("Practice 35: Fitness vs w4 Value")
+plt.xlabel("w4 (Stable Disks Weight)")
+plt.ylabel("Fitness (Wins out of 20)")
+plt.grid(True)
+plt.show()
+
+
 def simulated_annealing(
     initial_weights, max_iter, sigma, T0, T_end, baseline, n_games, depth
 ):  # 練習37：焼きなまし法を実装する
@@ -725,4 +747,4 @@ def genetic_algorithm(
     return population[best_idx], history
 
 
-othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
+# othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
