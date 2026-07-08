@@ -968,19 +968,25 @@ print("=" * 80)
 
 
 print("\n" + "=" * 40)
-print(" 練習43：考察データの収集シミュレーション")
+print(" 練習43：考察データの収集シミュレーション (修正版)")
 print("=" * 40)
 
-# 1. 検証のための「未知の強敵（テストプレイヤー）」を用意
-# 基準AI（ベースライン）とは全く異なる、位置点・確定石を極端に重視した尖った重み
+# 1. 基準AI（ベースライン）とは全く異なる、位置点・確定石を極端に重視した「未知の強敵」を用意
 test_opponent_weight = [10.0, 5.0, 300.0, 1000.0]
 eval_test_opponent = make_eval_node(test_opponent_weight)
 
-# 前のステップで得られた各アルゴリズムの最良重み（もし未実行なら自動代入）
-# ※変数名が異なる場合は適宜置き換えてください
-w_hc = best_w  # 山登り法の最終最良重み
-w_sa = best_std  # 焼きなまし法の最終最良重み
-w_ga = ga_final_step[1]  # GAの最終最良重み
+# --- 💡 履歴リスト(history)から最良の重みを安全に自動抽出 ---
+# ① 山登り法
+hc_best_idx = max(range(len(hc_history)), key=lambda i: hc_history[i][2])
+w_hc = hc_history[hc_best_idx][1]
+
+# ② 焼きなまし法
+sa_best_idx = max(range(len(sa_history)), key=lambda i: sa_history[i][2])
+w_sa = sa_history[sa_best_idx][1]
+
+# ③ 遺伝学的アルゴリズム
+ga_best_idx = max(range(len(ga_history)), key=lambda i: ga_history[i][2])
+w_ga = ga_history[ga_best_idx][1]
 
 algorithms = {
     "Hill Climbing": w_hc,
@@ -1026,10 +1032,12 @@ print(
 )
 print("-" * 80)
 
+# 最初の共通ベースライン初期値 [3.0, 20.0, 100.0, 500.0] を指定
+initial_w = [3.0, 20.0, 100.0, 500.0]
+
 for name, weight in algorithms.items():
     scores = []
     for _ in range(3):
-        # 同じ条件で10ゲームの勝数を3回測定してみる
         score = fitness(weight, baseline=initial_w, n_games=10, depth=2)
         scores.append(score)
     print(f"{name:<20} | {scores[0]:<12d} | {scores[1]:<12d} | {scores[2]:<12d}")
