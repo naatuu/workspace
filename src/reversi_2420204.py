@@ -690,4 +690,39 @@ def mutate(individual, sigma, pm):
     ]
 
 
+def genetic_algorithm(
+    pop_size, generations, baseline, n_games, depth, sigma=20.0, pc=0.8, pm=0.2
+):  # 練習41：GA 本体
+    # 初期集団：baseline まわりの乱数で初期化
+    population = [
+        [max(0.0, w + random.gauss(0, sigma * 2)) for w in baseline]
+        for _ in range(pop_size)
+    ]
+    history = []
+
+    for g in range(generations):
+        fitnesses = [fitness(ind, baseline, n_games, depth) for ind in population]
+        best_idx = max(range(pop_size), key=lambda i: fitnesses[i])
+        history.append((g, population[best_idx][:], fitnesses[best_idx]))
+
+        new_pop = [population[best_idx][:]]  # エリート保存
+        while len(new_pop) < pop_size:
+            a = tournament_select(population, fitnesses)
+            b = tournament_select(population, fitnesses)
+            if random.random() < pc:
+                c, d = crossover(a, b)
+            else:
+                c, d = a[:], b[:]
+            c = mutate(c, sigma, pm)
+            d = mutate(d, sigma, pm)
+            new_pop.append(c)
+            if len(new_pop) < pop_size:
+                new_pop.append(d)
+        population = new_pop
+
+    fitnesses = [fitness(ind, baseline, n_games, depth) for ind in population]
+    best_idx = max(range(pop_size), key=lambda i: fitnesses[i])
+    return population[best_idx], history
+
+
 othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
