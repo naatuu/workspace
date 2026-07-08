@@ -965,3 +965,73 @@ ga_weight_str = f"[{', '.join([f'{w:.2f}' for w in ga_best_weight])}]"
 print(f"{'Genetic Algorithm':<25} | {ga_best_fit:<12d} | {ga_weight_str:<30}")
 
 print("=" * 80)
+
+
+print("\n" + "=" * 40)
+print(" 練習43：考察データの収集シミュレーション")
+print("=" * 40)
+
+# 1. 検証のための「未知の強敵（テストプレイヤー）」を用意
+# 基準AI（ベースライン）とは全く異なる、位置点・確定石を極端に重視した尖った重み
+test_opponent_weight = [10.0, 5.0, 300.0, 1000.0]
+eval_test_opponent = make_eval_node(test_opponent_weight)
+
+# 前のステップで得られた各アルゴリズムの最良重み（もし未実行なら自動代入）
+# ※変数名が異なる場合は適宜置き換えてください
+w_hc = best_w  # 山登り法の最終最良重み
+w_sa = best_std  # 焼きなまし法の最終最良重み
+w_ga = ga_final_step[1]  # GAの最終最良重み
+
+algorithms = {
+    "Hill Climbing": w_hc,
+    "Simulated Annealing": w_sa,
+    "Genetic Algorithm": w_ga,
+}
+
+print("\n【実験①】未知のテストプレイヤーとの対戦（過学習の検証）")
+print(
+    "※学習相手（ベースライン）以外にも汎用的に強いかを50試合（先後交代）で測定します。"
+)
+print("-" * 80)
+print(f"{'アルゴリズム':<20} | {'対テストプレイヤー勝数':<22} | {'勝率':<8}")
+print("-" * 80)
+
+test_games = 50
+for name, weight in algorithms.items():
+    eval_candidate = make_eval_node(weight)
+
+    # 汎化性能テスト
+    wins = 0
+    for i in range(test_games):
+        if i % 2 == 0:
+            winner = play_one_game(eval_candidate, eval_test_opponent, depth=2)
+            if winner == BOARD_SENTE:
+                wins += 1
+        else:
+            winner = play_one_game(eval_test_opponent, eval_candidate, depth=2)
+            if winner == BOARD_GOTE:
+                wins += 1
+
+    win_rate = (wins / test_games) * 100
+    print(f"{name:<20} | {wins:<5d} / {test_games:<14d} | {win_rate:.1f}%")
+
+print("-" * 80)
+
+
+print("\n【実験②】評価ノイズ（再現性）の検証")
+print("※同じ重みでも、ランダム要素によって勝率がどれくらいブレるかを3回再測定します。")
+print("-" * 80)
+print(
+    f"{'アルゴリズム':<20} | {'測定1 (10局)':<12} | {'測定2 (10局)':<12} | {'測定3 (10局)':<12}"
+)
+print("-" * 80)
+
+for name, weight in algorithms.items():
+    scores = []
+    for _ in range(3):
+        # 同じ条件で10ゲームの勝数を3回測定してみる
+        score = fitness(weight, baseline=initial_w, n_games=10, depth=2)
+        scores.append(score)
+    print(f"{name:<20} | {scores[0]:<12d} | {scores[1]:<12d} | {scores[2]:<12d}")
+
+print("-" * 80)
