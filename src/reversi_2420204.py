@@ -718,85 +718,86 @@ def simulated_annealing(
 
     return best, history
 
+    # 実験の共通設定
+    # initial_w = [3.0, 20.0, 100.0, 500.0]
+    # max_iter = 40
+    # sigma = 15.0
+    # n_games = 10
+    # depth = 2
 
-# 実験の共通設定
-initial_w = [3.0, 20.0, 100.0, 500.0]
-max_iter = 40
-sigma = 15.0
-n_games = 10
-depth = 2
+    # パターン1: 標準的な設定
+    # print("\n--- [1] 標準設定での実験 ---")
+    # best_std, hist_std = simulated_annealing(
+    (initial_w,)
+    (max_iter,)
+    (sigma,)
+    T0 = (10.0,)
+    T_end = (0.1,)
+    baseline = (initial_w,)
+    n_games = (n_games,)
+    depth = (depth,)
+    # )
 
-# パターン1: 標準的な設定
-print("\n--- [1] 標準設定での実験 ---")
-best_std, hist_std = simulated_annealing(
-    initial_w,
-    max_iter,
-    sigma,
-    T0=10.0,
-    T_end=0.1,
-    baseline=initial_w,
-    n_games=n_games,
-    depth=depth,
-)
+    # パターン2: T0が大きすぎる
+    # print("\n--- [2] T0が大きすぎる実験 (ランダムウォーク) ---")
+    # best_high, hist_high = simulated_annealing(
+    (initial_w,)
+    (max_iter,)
+    (sigma,)
+    T0 = (1000.0,)
+    T_end = (100.0,)
+    baseline = (initial_w,)
+    n_games = (n_games,)
+    depth = (depth,)
+    # )
 
-# パターン2: T0が大きすぎる
-print("\n--- [2] T0が大きすぎる実験 (ランダムウォーク) ---")
-best_high, hist_high = simulated_annealing(
-    initial_w,
-    max_iter,
-    sigma,
-    T0=1000.0,
-    T_end=100.0,
-    baseline=initial_w,
-    n_games=n_games,
-    depth=depth,
-)
+    # パターン3: T0が小さすぎる
+    # print("\n--- [3] T0が小さすぎる実験 (山登り法化) ---")
+    # best_low, hist_low = simulated_annealing(
+    (initial_w,)
+    (max_iter,)
+    (sigma,)
+    T0 = (0.001,)
+    T_end = (0.0001,)
+    baseline = (initial_w,)
+    n_games = (n_games,)
+    depth = (depth,)
+    # )
 
-# パターン3: T0が小さすぎる
-print("\n--- [3] T0が小さすぎる実験 (山登り法化) ---")
-best_low, hist_low = simulated_annealing(
-    initial_w,
-    max_iter,
-    sigma,
-    T0=0.001,
-    T_end=0.0001,
-    baseline=initial_w,
-    n_games=n_games,
-    depth=depth,
-)
+    # --- グラフの描画 ---
+    # plt.figure(figsize=(10, 6))
 
-# --- グラフの描画 ---
-plt.figure(figsize=(10, 6))
+    # plt.plot(
+    ([h[0] for h in hist_std],)
+    ([h[2] for h in hist_std],)
+    label = ("Standard (T0=10.0, Tend=0.1)",)
+    color = ("green",)
+    linewidth = (2,)
+    # )
+    # plt.plot(
+    ([h[0] for h in hist_high],)
+    ([h[2] for h in hist_high],)
+    label = ("Too High T0 (1000.0) -> Random Walk",)
+    color = ("red",)
+    linestyle = ("--",)
+    # )
+    # plt.plot(
+    ([h[0] for h in hist_low],)
+    ([h[2] for h in hist_low],)
+    label = ("Too Low T0 (0.001) -> Hill Climbing",)
+    color = ("blue",)
+    linestyle = (":",)
 
-plt.plot(
-    [h[0] for h in hist_std],
-    [h[2] for h in hist_std],
-    label="Standard (T0=10.0, Tend=0.1)",
-    color="green",
-    linewidth=2,
-)
-plt.plot(
-    [h[0] for h in hist_high],
-    [h[2] for h in hist_high],
-    label="Too High T0 (1000.0) -> Random Walk",
-    color="red",
-    linestyle="--",
-)
-plt.plot(
-    [h[0] for h in hist_low],
-    [h[2] for h in hist_low],
-    label="Too Low T0 (0.001) -> Hill Climbing",
-    color="blue",
-    linestyle=":",
-)
 
-plt.title("Practice 38: Effect of Temperature Schedules")
-plt.xlabel("Iteration (t)")
-plt.ylabel("Current Fitness (Wins)")
-plt.grid(True)
-plt.legend()
-plt.savefig("温度スケジュールの影響_練習38.png", dpi=300, bbox_inches="tight")
-plt.show()
+# )
+
+# plt.title("Practice 38: Effect of Temperature Schedules")
+# plt.xlabel("Iteration (t)")
+# plt.ylabel("Current Fitness (Wins)")
+# plt.grid(True)
+# plt.legend()
+# plt.savefig("温度スケジュールの影響_練習38.png", dpi=300, bbox_inches="tight")
+# plt.show()
 
 
 def tournament_select(population, fitnesses, k=3):  # 練習39：トーナメント選択
@@ -856,4 +857,111 @@ def genetic_algorithm(
     return population[best_idx], history
 
 
-# othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
+# 共通のベースライン設定
+initial_w = [3.0, 20.0, 100.0, 500.0]
+depth = 2
+n_games_common = 10  # 1回の適合度測定に使う試合数
+
+print("--- 練習42: 3大アルゴリズムの公平比較実験を開始（総予算200試合） ---")
+
+# 1. 山登り法 (反復20 × 10試合 = 200)
+print("\n[実行中] 山登り法...")
+_, hc_history = hill_climbing(
+    initial_weights=initial_w,
+    max_iter=20,
+    sigma=15.0,
+    baseline=initial_w,
+    n_games=n_games_common,
+    depth=depth,
+)
+
+# 2. 焼きなまし法 (反復20 × 10試合 = 200)
+print("\n[実行中] 焼きなまし法...")
+_, sa_history = simulated_annealing(
+    initial_weights=initial_w,
+    max_iter=20,
+    sigma=15.0,
+    T0=10.0,
+    T_end=0.1,
+    baseline=initial_w,
+    n_games=n_games_common,
+    depth=depth,
+)
+
+# 3. 遺伝学的アルゴリズム (個体5 × 世代4 × 10試合 = 200)
+print("\n[実行中] 遺伝学的アルゴリズム...")
+_, ga_history = genetic_algorithm(
+    pop_size=5,
+    generations=4,
+    baseline=initial_w,
+    n_games=n_games_common,
+    depth=depth,
+    sigma=15.0,
+)
+
+# --- 各データの「消費した総ゲーム数（横軸）」を計算してプロット ---
+# 横軸を「世代/反復数」ではなく「それまでに消費した総ゲーム数」に揃えることで、真の効率が見えます。
+hc_games = [h[0] * n_games_common for h in hc_history]
+hc_fits = [h[2] for h in hc_history]
+
+sa_games = [s[0] * n_games_common for s in sa_history]
+sa_fits = [s[2] for s in sa_history]
+
+# GAは各世代の終わりに pop_size * n_games ずつ消費していく
+ga_games = [(g[0] + 1) * 5 * n_games_common for g in ga_history]
+ga_fits = [g[2] for g in ga_history]
+# スタート地点（0試合時点）として初期の最高値を先頭に補完
+ga_games.insert(0, 0)
+ga_fits.insert(0, hc_fits[0])
+
+# --- グラフ描画と自動保存 ---
+plt.figure(figsize=(10, 6))
+
+plt.plot(hc_games, hc_fits, marker="o", label="Hill Climbing", color="blue")
+plt.plot(sa_games, sa_fits, marker="s", label="Simulated Annealing", color="green")
+plt.plot(
+    ga_games, ga_fits, marker="^", label="Genetic Algorithm", color="red", linewidth=2
+)
+
+plt.title("Practice 42: Optimization Performance Comparison (Budget = 200 Games)")
+plt.xlabel("Total Evaluated Games (Computational Cost)")
+plt.ylabel("Best Fitness (Wins)")
+plt.xlim(0, 200)
+plt.grid(True)
+plt.legend()
+
+# 高画質（dpi=300）で枠外はみ出しを防いで保存
+plt.savefig("練習42.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# --- 最終最良適合度と最良重みの表示システム ---
+print("\n" + "=" * 80)
+print(
+    f"{'アルゴリズム':<25} | {'最終最良適合度':<12} | {'最良重みベクトル [w2, w3, w4, w5]':<30}"
+)
+print("=" * 80)
+
+# 1. 山登り法（historyの最後の要素から取得）
+hc_final_step = hc_history[-1]
+hc_best_weight = hc_final_step[1]
+hc_best_fit = hc_final_step[2]
+hc_weight_str = f"[{', '.join([f'{w:.2f}' for w in hc_best_weight])}]"
+print(f"{'Hill Climbing':<25} | {hc_best_fit:<12d} | {hc_weight_str:<30}")
+
+# 2. 焼きなまし法（変数の直参照を避け、sa_historyの全履歴から最高値を自動抽出）
+# 履歴の中で一番高い勝数（適合度）を持つインデックスを見つける
+sa_best_idx = max(range(len(sa_history)), key=lambda i: sa_history[i][2])
+sa_best_step = sa_history[sa_best_idx]
+sa_best_weight = sa_best_step[1]
+sa_best_fit = sa_best_step[2]
+sa_weight_str = f"[{', '.join([f'{w:.2f}' for w in sa_best_weight])}]"
+print(f"{'Simulated Annealing':<25} | {sa_best_fit:<12d} | {sa_weight_str:<30}")
+
+# 3. 遺伝学的アルゴリズム（ga_historyの最後の要素から取得）
+ga_final_step = ga_history[-1]
+ga_best_weight = ga_final_step[1]
+ga_best_fit = ga_final_step[2]
+ga_weight_str = f"[{', '.join([f'{w:.2f}' for w in ga_best_weight])}]"
+print(f"{'Genetic Algorithm':<25} | {ga_best_fit:<12d} | {ga_weight_str:<30}")
+
+print("=" * 80)
