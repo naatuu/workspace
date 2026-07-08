@@ -675,4 +675,19 @@ def tournament_select(population, fitnesses, k=3):  # 練習39：トーナメン
     return population[best]
 
 
+def crossover(a, b):  # 練習40：交叉と突然変異
+    """一様交叉：各次元について確率 0.5 で親を入れ替える"""
+    c = [a[i] if random.random() < 0.5 else b[i] for i in range(len(a))]
+    d = [b[i] if random.random() < 0.5 else a[i] for i in range(len(a))]
+    return c, d
+
+
+def mutate(individual, sigma, pm):
+    """各次元に確率 pm でガウス雑音を加える"""
+    return [
+        max(0.0, w + random.gauss(0, sigma)) if random.random() < pm else w
+        for w in individual
+    ]
+
+
 othello([BOARD_EMPTY], 3)  # コンピュータ vs コンピュータ
